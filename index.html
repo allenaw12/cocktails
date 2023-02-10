@@ -13,18 +13,30 @@
     <link rel="stylesheet" href="normalize.css">
 </head>
 <body>
-    <fieldset>
     <form id="form" action="">
-        <label for="search">Search:</label>
+        <!-- <select name="filter" id="filter">
+            <option value="" selected disabled>Choose to sort by alcohol content</option>
+            <option value="alcoholic">Alcoholic</option>
+            <option value="non-alcholic">Non-Alcholic</option>
+            <option value="optional-alcohol">Optional Alcohol</option>
+        </select> -->
+        
+        <label for="search">Search by:</label>
+        <select name="searchFocus" id="searchFocus">
+            <option value="name" selected>Name</option>
+            <option value="ingredient">Ingredient</option>
+        </select>
         <input type="text" name="" id="search">
         <button type="submit">Search</button>
     </form>
-    </fieldset>
-
-    <section class="results"></section>
-
-    <span class="prev"><</span>
-    <span class="next">></span>
+    
+    <div class="wrapper">
+        <span class="prev"><</span>
+        <h3 class="noResults"></h3>
+        <section id="results"></section>
+        <span class="next">></span>
+    </div>
+    
     <script src="main.js"></script>
 </body>
 </html>
