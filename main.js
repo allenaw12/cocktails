@@ -47,12 +47,12 @@ function getDrink(e) {
     //         data.drinks.forEach(obj =>{
     //let cards =[]
         drinks.forEach(drink =>{
-            console.log(drink.strDrink)
+            //console.log(drink)
             if(searchFocus === 'name' && drink.strDrink.toLowerCase().includes(input)){
-                console.log('in name and drink includes')
+                //console.log('in name and drink includes')
                 return (makeCard(drink))
             }else if(searchFocus === 'ingredient'){
-                console.log('in ingredient')
+                //console.log('in ingredient')
                 let ingredients = []
                 for(prop in drink){
                     if(prop.includes('Ingredient') && drink[prop] !== null){
@@ -60,16 +60,15 @@ function getDrink(e) {
                     }
                 }
                 if(ingredients.includes(input)){
-                    console.log('ingredient included')
+                    //console.log('ingredient included')
                     return (makeCard(drink))
                 }
             }else{
-                console.log('in null')
+                //console.log('in null')
                 null
             }
         function makeCard(obj){
                 let sect = document.querySelector('#results')
-                console.log(sect)
                 let div = document.createElement('div')
                 let h3 = document.createElement('h3')
                 let img = document.createElement('img')
@@ -78,15 +77,22 @@ function getDrink(e) {
                 let ingred = document.createElement('span')
                 let instru = document.createElement('span')
                 let ingredients = []
+                let measures = []
                 for(prop in obj){
                     if(prop.includes('Ingredient') && obj[prop] !== null){
                         ingredients.push(obj[prop])
+                    }else if(prop.includes('Measure')){
+                        measures.push(obj[prop])
                     }
                 }
                 for(i=0;i<ingredients.length;i++){
                     let li = document.createElement('li')
-                    li.innerText = ingredients[i]
+                    if(measures[i] && measures[i].indexOf("\n")!==-1){
+                        measures[i] = measures[i].replace('\n', '')
+                    }
+                    li.innerText = measures[i] ? `${measures[i]} ${ingredients[i]}` :ingredients[i]
                     ul.appendChild(li)
+                    // console.log(`${measures[i]} ${ingredients[i]}`, measures[i]===null? null : measures[i].indexOf("\n")==-1 )
                 }
                 ingred.innerText = 'Ingredients:'
                 instru.innerText = 'Instructions:'
@@ -113,18 +119,18 @@ function getDrink(e) {
         }
     })
         let cards = document.querySelectorAll('.card')
-        console.log(cards)
+        // console.log(cards)
         let noresults = document.querySelector('.noResults')
         if(cards.length !== 0){
-            console.log('cards present')
+            //console.log('cards present')
             noresults.style.display = 'none'
             cards.forEach(card => {
                 card.style.display = "none"
             })
-            console.log('then block', cards[0])
+            //console.log('then block', cards[0])
             cards[0].style.display = "block"
         }else{
-            console.log('cards NOT present')
+            //console.log('cards NOT present')
             noresults.style.display = 'block'
             noresults.innerText = 'No results found, please try a different search.'
         }
@@ -192,4 +198,3 @@ const prev = (e) => {
 
 document.querySelector(".next").addEventListener('click', next)
 document.querySelector(".prev").addEventListener('click', prev)
-  
