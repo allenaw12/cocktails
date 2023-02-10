@@ -1,5 +1,25 @@
 //The user will enter a cocktail. Get a cocktail name, photo, and instructions and place them in the DOM
 
+//on page load, retrieves list of all drinks
+document.querySelector('body').addEventListener('load',drinksList())
+//stores drinks from all letter fetches
+let drinks = []
+//iterates thru alphabet, gathering all drinks for each letter and pushing to drinks variable above
+function drinksList(){
+    let alpha = 'abcdefghijklmnopqrstuvwxyz'
+    for(char of alpha){
+        //console.log('fetching char =', char)
+        fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${char}`)
+            .then(res=> res.json())
+            .then(data => {
+                //console.log(data)
+                data.drinks!==null ? data.drinks.forEach(drink => drinks.push(drink)) : null
+            })
+            .catch(err=>console.log(`Error: ${err}`))
+    }
+    console.log('finished')
+}
+
 //document.querySelector('button').addEventListener('click', getDrink)
 //document.querySelector('input').addEventListener('keydown', enterKey)
 //adds listener to form element and responds with any click or key press that equals submit
@@ -13,17 +33,43 @@ document.querySelector('#form').addEventListener('submit', getDrink)
 
 function getDrink(e) {
     e.preventDefault()
-    let drink = document.querySelector('input').value
-    let divs = document.querySelectorAll('div')
+    let input = document.querySelector('input').value.toLowerCase()
+    let searchFocus = document.querySelector('#searchFocus').value
+    let divs = document.querySelectorAll('.card')
     if(divs.length > 0){
         divs.forEach(el => el.remove())
     }
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`)
-        .then(res=>res.json())
-        .then(data => {
-            // let drinks = []
-            data.drinks.forEach(obj =>{
-                let sect = document.querySelector('.results')
+    // fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`)
+    //     .then(res=>res.json())
+    //     .then(data => {
+    //         console.log(data.drinks)
+    //         // let drinks = []
+    //         data.drinks.forEach(obj =>{
+    //let cards =[]
+        drinks.forEach(drink =>{
+            console.log(drink.strDrink)
+            if(searchFocus === 'name' && drink.strDrink.toLowerCase().includes(input)){
+                console.log('in name and drink includes')
+                return (makeCard(drink))
+            }else if(searchFocus === 'ingredient'){
+                console.log('in ingredient')
+                let ingredients = []
+                for(prop in drink){
+                    if(prop.includes('Ingredient') && drink[prop] !== null){
+                        ingredients.push(drink[prop].toLowerCase())
+                    }
+                }
+                if(ingredients.includes(input)){
+                    console.log('ingredient included')
+                    return (makeCard(drink))
+                }
+            }else{
+                console.log('in null')
+                null
+            }
+        function makeCard(obj){
+                let sect = document.querySelector('#results')
+                console.log(sect)
                 let div = document.createElement('div')
                 let h3 = document.createElement('h3')
                 let img = document.createElement('img')
@@ -55,7 +101,7 @@ function getDrink(e) {
                 div.appendChild(instru)
                 div.appendChild(p)
                 sect.appendChild(div)
-
+                return
             //     let drink = [obj.strDrink, obj.strDrinkThumb, obj.strInstructions, []]
             //     for(prop in obj){
             //         if(prop.includes('Ingredient') && obj[prop] !== null){
@@ -64,13 +110,24 @@ function getDrink(e) {
             //     }
             //     drinks.push(drink)
             // })
-            
-        })
-        cards = document.querySelectorAll('div')
+        }
+    })
+        let cards = document.querySelectorAll('.card')
+        console.log(cards)
+        let noresults = document.querySelector('.noResults')
+        if(cards.length !== 0){
+            console.log('cards present')
+            noresults.style.display = 'none'
             cards.forEach(card => {
                 card.style.display = "none"
-                })
+            })
+            console.log('then block', cards[0])
             cards[0].style.display = "block"
+        }else{
+            console.log('cards NOT present')
+            noresults.style.display = 'block'
+            noresults.innerText = 'No results found, please try a different search.'
+        }
         // .then(array=>{
         //     array.forEach(drink=>{
         //         let sect = document.querySelector('.results')
@@ -101,12 +158,12 @@ function getDrink(e) {
         //         sect.appendChild(div)
         //     })
         
-        })
-        .catch(err=>console.log(`Error: ${err}`))
+        //})
+        //.catch(err=>console.log(`Error: ${err}`))
 }
 
 let currentDrink = 0
-let cards = document.querySelectorAll("div")
+let cards = document.querySelectorAll(".card")
 
 let gallery = (i) => { 
     cards.forEach(card => {
@@ -118,7 +175,7 @@ let gallery = (i) => {
 
 //next arrow on slideshow
 const next = (e) => {
-    cards = document.querySelectorAll("div")
+    cards = document.querySelectorAll(".card")
     if(e){
       e.preventDefault()}
     currentDrink >= cards.length - 1 ? currentDrink = 0 : currentDrink++
@@ -127,7 +184,7 @@ const next = (e) => {
   
 //previous arrow on slideshow
 const prev = (e) => {
-    cards = document.querySelectorAll("div")
+    cards = document.querySelectorAll(".card")
     e.preventDefault()
     currentDrink <= 0 ? currentDrink = cards.length - 1 : currentDrink--
     gallery(currentDrink)
