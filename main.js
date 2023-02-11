@@ -33,6 +33,8 @@ document.querySelector('#form').addEventListener('submit', getDrink)
 
 function getDrink(e) {
     e.preventDefault()
+    //let choice = document.querySelector('#filter')
+    //choice.selectedIndex = 0
     let input = document.querySelector('input').value.toLowerCase()
     let searchFocus = document.querySelector('#searchFocus').value
     let divs = document.querySelectorAll('.card')
@@ -46,8 +48,8 @@ function getDrink(e) {
     //         // let drinks = []
     //         data.drinks.forEach(obj =>{
     //let cards =[]
-        drinks.forEach(drink =>{
-            //console.log(drink)
+    drinks.forEach(drink =>{
+            //console.log(drink.strAlcoholic)
             if(searchFocus === 'name' && drink.strDrink.toLowerCase().includes(input)){
                 //console.log('in name and drink includes')
                 return (makeCard(drink))
@@ -68,46 +70,51 @@ function getDrink(e) {
                 null
             }
         function makeCard(obj){
-                let sect = document.querySelector('#results')
-                let div = document.createElement('div')
-                let h3 = document.createElement('h3')
-                let img = document.createElement('img')
-                let p = document.createElement('p')
-                let ul = document.createElement('ul')
-                let ingred = document.createElement('span')
-                let instru = document.createElement('span')
-                let ingredients = []
-                let measures = []
-                for(prop in obj){
-                    if(prop.includes('Ingredient') && obj[prop] !== null){
-                        ingredients.push(obj[prop])
-                    }else if(prop.includes('Measure')){
-                        measures.push(obj[prop])
-                    }
+            let sect = document.querySelector('#results')
+            let div = document.createElement('div')
+            let h3 = document.createElement('h3')
+            let img = document.createElement('img')
+            let p = document.createElement('p')
+            let ul = document.createElement('ul')
+            let ingred = document.createElement('span')
+            let instru = document.createElement('span')
+            let hiddenAlc = document.createElement('span')
+            let ingredients = []
+            let measures = []
+            for(prop in obj){
+                if(prop.includes('Ingredient') && obj[prop] !== null){
+                    ingredients.push(obj[prop])
+                }else if(prop.includes('Measure')){
+                    measures.push(obj[prop])
                 }
-                for(i=0;i<ingredients.length;i++){
-                    let li = document.createElement('li')
-                    if(measures[i] && measures[i].indexOf("\n")!==-1){
-                        measures[i] = measures[i].replace('\n', '')
-                    }
-                    li.innerText = measures[i] ? `${measures[i]} ${ingredients[i]}` :ingredients[i]
-                    ul.appendChild(li)
-                    // console.log(`${measures[i]} ${ingredients[i]}`, measures[i]===null? null : measures[i].indexOf("\n")==-1 )
+            }
+            for(i=0;i<ingredients.length;i++){
+                let li = document.createElement('li')
+                if(measures[i] && measures[i].indexOf("\n")!==-1){
+                    measures[i] = measures[i].replace('\n', '')
                 }
-                ingred.innerText = 'Ingredients:'
-                instru.innerText = 'Instructions:'
-                h3.innerText = obj.strDrink
-                img.src = obj.strDrinkThumb
-                p.innerText = obj.strInstructions
-                div.setAttribute('class','card')
-                div.appendChild(h3)
-                div.appendChild(img)
-                div.appendChild(ingred)
-                div.appendChild(ul)
-                div.appendChild(instru)
-                div.appendChild(p)
-                sect.appendChild(div)
-                return
+                li.innerText = measures[i] ? `${measures[i]} ${ingredients[i]}` :ingredients[i]
+                ul.appendChild(li)
+                // console.log(`${measures[i]} ${ingredients[i]}`, measures[i]===null? null : measures[i].indexOf("\n")==-1 )
+            }
+            hiddenAlc.innerText = obj.strAlcoholic.toLowerCase()
+            hiddenAlc.style.display = 'none'
+            hiddenAlc.classList.add('alcoholContent')
+            ingred.innerText = 'Ingredients:'
+            instru.innerText = 'Instructions:'
+            h3.innerText = obj.strDrink
+            img.src = obj.strDrinkThumb
+            p.innerText = obj.strInstructions
+            div.setAttribute('class','card')
+            div.appendChild(h3)
+            div.appendChild(img)
+            div.appendChild(ingred)
+            div.appendChild(ul)
+            div.appendChild(instru)
+            div.appendChild(p)
+            div.appendChild(hiddenAlc)
+            sect.appendChild(div)
+            return
             //     let drink = [obj.strDrink, obj.strDrinkThumb, obj.strInstructions, []]
             //     for(prop in obj){
             //         if(prop.includes('Ingredient') && obj[prop] !== null){
@@ -129,10 +136,12 @@ function getDrink(e) {
             })
             //console.log('then block', cards[0])
             cards[0].style.display = "block"
+            document.querySelector('#filter').toggleAttribute('disabled', false)
         }else{
             //console.log('cards NOT present')
             noresults.style.display = 'block'
             noresults.innerText = 'No results found, please try a different search.'
+            document.querySelector('#filter').toggleAttribute('disabled', true)
         }
         // .then(array=>{
         //     array.forEach(drink=>{
@@ -169,11 +178,12 @@ function getDrink(e) {
 }
 
 let currentDrink = 0
-let cards = document.querySelectorAll(".card")
+let cards = null
 
 let gallery = (i) => { 
+    if(cards.length === 0)return
     cards.forEach(card => {
-    card.style.display = "none"
+        card.style.display = "none"
     })
     cards[i].style.display = "block"
 }
@@ -198,3 +208,30 @@ const prev = (e) => {
 
 document.querySelector(".next").addEventListener('click', next)
 document.querySelector(".prev").addEventListener('click', prev)
+
+let searchCards = null
+function filterAlcohol(){
+    cards = document.querySelectorAll(".card")
+    let choice = document.querySelector('#filter').value
+    if(choice.includes('-')){
+        choice = choice.replace('-', ' ')
+        console.log('choice had dash', choice)
+    }
+    //let options = ["alcoholic","non-alcholic","optional-alcohol"]
+    //let optionsDB = ["Alcoholic", "Non alcoholic", "Optional alcohol"]
+    console.log(searchCards,cards)
+    searchCards = cards
+    for(card of cards){
+        let content = card.querySelector('.alcoholContent').innerText
+        console.log(content, choice)
+        if(content !== choice){
+            console.log('they do not match', card)
+            card.remove()
+        }
+    }
+    console.log(cards, searchCards)
+    currentDrink = 0
+    return gallery(0)
+}
+
+document.querySelector('#filter').addEventListener('input', filterAlcohol)

@@ -13,30 +13,40 @@
     <link rel="stylesheet" href="normalize.css">
 </head>
 <body>
+    <header>
+        <h1>Mixed drinks, cocktails, fun times!</h1>
+        <p>Search by name or ingredient! Optional filter by alcoholic, non-alcoholic, or optional alcohol.</p>
+    </header>
     <form id="form" action="">
-        <!-- <select name="filter" id="filter">
-            <option value="" selected disabled>Choose to sort by alcohol content</option>
-            <option value="alcoholic">Alcoholic</option>
-            <option value="non-alcholic">Non-Alcholic</option>
-            <option value="optional-alcohol">Optional Alcohol</option>
-        </select> -->
-        
-        <label for="search">Search by:</label>
-        <select name="searchFocus" id="searchFocus">
-            <option value="name" selected>Name</option>
-            <option value="ingredient">Ingredient</option>
-        </select>
-        <input type="text" name="" id="search">
-        <button type="submit">Search</button>
+        <fieldset id="searchPart">
+            <label for="search">Search by:</label>
+            <select name="searchFocus" id="searchFocus">
+                <option value="name" selected>Name</option>
+                <option value="ingredient">Ingredient</option>
+            </select>
+            <input type="text" name="" id="search">
+            <button type="submit">Search</button>
+        </fieldset>
+        <!-- <fieldset id="filterPart">
+            <label for="filter">Filter by:</label>
+            <select name="filter" id="filter" disabled>
+                <option value=""selected>None</option>
+                <option value="alcoholic">Alcoholic</option>
+                <option value="non-alcoholic">Non-Alcoholic</option>
+                <option value="optional-alcohol">Optional Alcohol</option>
+            </select>
+        </fieldset> -->
     </form>
-    
+    <h3 class="noResults"></h3>
     <div class="wrapper">
-        <span class="prev"><</span>
-        <h3 class="noResults"></h3>
+        <span class="prev">◄</span>
         <section id="results"></section>
-        <span class="next">></span>
+        <span class="next">►</span>
     </div>
-    
+    <footer>
+        <span>Data from: <a href="https://www.thecocktaildb.com/">TheCocktailDB.com</a> API</span>
+        <span>Website built by: <a href="https://allenawilliamsonportfolio.netlify.app/">Allena Williamson</a></span>
+    </footer>
     <script src="main.js"></script>
 </body>
 </html>
