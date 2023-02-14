@@ -185,10 +185,10 @@ let cards
 let gallery = (i) => { 
     if(cards.length === 0)return null
     cards.forEach((card, index) => {
-        console.log('set style to none')
+        //console.log('set style to none')
         card.style.display = "none"
     })
-    console.log('index given is', i)
+    //console.log('index given is', i)
     cards[i].style.display = "block"
 }
 //document.querySelector('#form').addEventListener('submit', gallery(currentDrink))
@@ -228,16 +228,16 @@ function filterAlcohol(){
         searchCards = cards
     }
     cards.forEach(el => el.remove())
-    console.log(cards)
+    //console.log(cards)
     searchCards.forEach(card => {
         let sect = document.querySelector('#results')
         let content = card.querySelector('.alcoholContent').innerText
-        console.log(content === choice)
+        //console.log(content === choice)
         if(choice === '' || content === choice){
             sect.appendChild(card)
         }
     })
-    console.log(choice)
+    //console.log(choice)
     cards = document.querySelectorAll(".card")
     let noresults = document.querySelector('.noResults')
     if(cards.length === 0){
