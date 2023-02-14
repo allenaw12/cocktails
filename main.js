@@ -33,11 +33,13 @@ document.querySelector('#form').addEventListener('submit', getDrink)
 
 function getDrink(e) {
     e.preventDefault()
-    //let choice = document.querySelector('#filter')
-    //choice.selectedIndex = 0
+    let choice = document.querySelector('#filter')
+    //reset alcoholic filter to none when searching
+    choice.selectedIndex = 0
     let input = document.querySelector('input').value.toLowerCase()
     let searchFocus = document.querySelector('#searchFocus').value
     let divs = document.querySelectorAll('.card')
+    searchCards = undefined
     if(divs.length > 0){
         divs.forEach(el => el.remove())
     }
@@ -125,7 +127,7 @@ function getDrink(e) {
             // })
         }
     })
-        let cards = document.querySelectorAll('.card')
+        cards = document.querySelectorAll('.card')
         // console.log(cards)
         let noresults = document.querySelector('.noResults')
         if(cards.length !== 0){
@@ -178,20 +180,22 @@ function getDrink(e) {
 }
 
 let currentDrink = 0
-let cards = null
+let cards
 
 let gallery = (i) => { 
-    if(cards.length === 0)return
-    cards.forEach(card => {
+    if(cards.length === 0)return null
+    cards.forEach((card, index) => {
+        console.log('set style to none')
         card.style.display = "none"
     })
+    console.log('index given is', i)
     cards[i].style.display = "block"
 }
 //document.querySelector('#form').addEventListener('submit', gallery(currentDrink))
 
 //next arrow on slideshow
 const next = (e) => {
-    cards = document.querySelectorAll(".card")
+    // cards = document.querySelectorAll(".card")
     if(e){
       e.preventDefault()}
     currentDrink >= cards.length - 1 ? currentDrink = 0 : currentDrink++
@@ -200,7 +204,7 @@ const next = (e) => {
   
 //previous arrow on slideshow
 const prev = (e) => {
-    cards = document.querySelectorAll(".card")
+    // cards = document.querySelectorAll(".card")
     e.preventDefault()
     currentDrink <= 0 ? currentDrink = cards.length - 1 : currentDrink--
     gallery(currentDrink)
@@ -209,29 +213,48 @@ const prev = (e) => {
 document.querySelector(".next").addEventListener('click', next)
 document.querySelector(".prev").addEventListener('click', prev)
 
-let searchCards = null
+
+//from current search array, filter drinks that match alcohol filter and display
+//populate to cards, but keep current full search cards in memory
+//if filter is changed, run function again
+//if search is changed, empty 'cached' cards and replace with null, make sure alcohol filter is reset to none
+let searchCards
 function filterAlcohol(){
-    cards = document.querySelectorAll(".card")
     let choice = document.querySelector('#filter').value
-    if(choice.includes('-')){
+    if(choice.indexOf('-') !== -1){
         choice = choice.replace('-', ' ')
-        console.log('choice had dash', choice)
     }
-    //let options = ["alcoholic","non-alcholic","optional-alcohol"]
-    //let optionsDB = ["Alcoholic", "Non alcoholic", "Optional alcohol"]
-    console.log(searchCards,cards)
-    searchCards = cards
-    for(card of cards){
+    if(searchCards === undefined){
+        searchCards = cards
+    }
+    cards.forEach(el => el.remove())
+    console.log(cards)
+    searchCards.forEach(card => {
+        let sect = document.querySelector('#results')
         let content = card.querySelector('.alcoholContent').innerText
-        console.log(content, choice)
-        if(content !== choice){
-            console.log('they do not match', card)
-            card.remove()
+        console.log(content === choice)
+        if(choice === '' || content === choice){
+            sect.appendChild(card)
         }
+    })
+    console.log(choice)
+    cards = document.querySelectorAll(".card")
+    let noresults = document.querySelector('.noResults')
+    if(cards.length === 0){
+        noresults.style.display = 'block'
+        noresults.innerText = 'No results found, please try a different search or filter.'
+        //document.querySelector('#filter').toggleAttribute('disabled', true)
+    }else{
+        noresults.style.display = 'none'
+            cards.forEach(card => {
+                card.style.display = "none"
+            })
+            //console.log('then block', cards[0])
+            cards[0].style.display = "block"
     }
-    console.log(cards, searchCards)
-    currentDrink = 0
-    return gallery(0)
+    //gallery(0)
 }
 
 document.querySelector('#filter').addEventListener('input', filterAlcohol)
+// document.querySelector('#filter').addEventListener('mousemove', logCards)
+// function logCards(){ console.log(cards)}
