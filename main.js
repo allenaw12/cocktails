@@ -33,6 +33,7 @@ document.querySelector('#form').addEventListener('submit', getDrink)
 
 function getDrink(e) {
     e.preventDefault()
+    document.querySelector('.starting').style.display = 'none'
     let choice = document.querySelector('#filter')
     //reset alcoholic filter to none when searching
     choice.selectedIndex = 0
@@ -142,6 +143,7 @@ function getDrink(e) {
         }else{
             //console.log('cards NOT present')
             noresults.style.display = 'block'
+            document.querySelector('.starting').style.display = 'block'
             noresults.innerText = 'No results found, please try a different search.'
             document.querySelector('#filter').toggleAttribute('disabled', true)
         }
@@ -242,9 +244,11 @@ function filterAlcohol(){
     let noresults = document.querySelector('.noResults')
     if(cards.length === 0){
         noresults.style.display = 'block'
+        document.querySelector('.starting').style.display = 'block'
         noresults.innerText = 'No results found, please try a different search or filter.'
         //document.querySelector('#filter').toggleAttribute('disabled', true)
     }else{
+        document.querySelector('.starting').style.display = 'none'
         noresults.style.display = 'none'
             cards.forEach(card => {
                 card.style.display = "none"
