@@ -140,6 +140,7 @@ function getDrink(e) {
             //console.log('then block', cards[0])
             cards[0].style.display = "block"
             document.querySelector('#filter').toggleAttribute('disabled', false)
+            document.querySelector('#searchCount').innerText = `Results: ${cards.length}`
             startSlideShow()
         }else{
             //console.log('cards NOT present')
@@ -147,6 +148,7 @@ function getDrink(e) {
             document.querySelector('.starting').style.display = 'block'
             noresults.innerText = 'No results found, please try a different search.'
             document.querySelector('#filter').toggleAttribute('disabled', true)
+            document.querySelector('#searchCount').innerText = ``
         }
         // .then(array=>{
         //     array.forEach(drink=>{
@@ -201,6 +203,7 @@ const next = (e) => {
     // cards = document.querySelectorAll(".card")
     if(e){
       e.preventDefault()}
+    if(!cards)return
     currentDrink >= cards.length - 1 ? currentDrink = 0 : currentDrink++
     gallery(currentDrink)
 }
@@ -209,6 +212,7 @@ const next = (e) => {
 const prev = (e) => {
     // cards = document.querySelectorAll(".card")
     e.preventDefault()
+    if(!cards)return
     currentDrink <= 0 ? currentDrink = cards.length - 1 : currentDrink--
     gallery(currentDrink)
 }
@@ -247,6 +251,7 @@ function filterAlcohol(){
     if(cards.length === 0){
         noresults.style.display = 'block'
         document.querySelector('.starting').style.display = 'block'
+        document.querySelector('#searchCount').innerText = ``
         noresults.innerText = 'No results found, please try a different search or filter.'
         //document.querySelector('#filter').toggleAttribute('disabled', true)
     }else{
@@ -257,6 +262,7 @@ function filterAlcohol(){
         })
         //console.log('then block', cards[0])
         cards[0].style.display = "block"
+        document.querySelector('#searchCount').innerText = `Results: ${cards.length}`
         startSlideShow()
     }
     //gallery(0)
@@ -275,7 +281,6 @@ const init = (currentDrink) => {
 //start gallery slideshow
 var intervalID;
 function startSlideShow(){
-    console.log('start slideshow')
   if(intervalID !== undefined){
     clearInterval(intervalID)
   }
@@ -283,6 +288,5 @@ function startSlideShow(){
 }
 //stop gallery slideshow
 function stopSlideShow(){
-    console.log('end slideshow')
   clearInterval(intervalID);
 }
