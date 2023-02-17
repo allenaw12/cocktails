@@ -140,6 +140,7 @@ function getDrink(e) {
             //console.log('then block', cards[0])
             cards[0].style.display = "block"
             document.querySelector('#filter').toggleAttribute('disabled', false)
+            startSlideShow()
         }else{
             //console.log('cards NOT present')
             noresults.style.display = 'block'
@@ -214,7 +215,8 @@ const prev = (e) => {
 
 document.querySelector(".next").addEventListener('click', next)
 document.querySelector(".prev").addEventListener('click', prev)
-
+document.querySelector(".next").addEventListener('click', stopSlideShow)
+document.querySelector(".prev").addEventListener('click', stopSlideShow)
 
 //from current search array, filter drinks that match alcohol filter and display
 //populate to cards, but keep current full search cards in memory
@@ -250,11 +252,12 @@ function filterAlcohol(){
     }else{
         document.querySelector('.starting').style.display = 'none'
         noresults.style.display = 'none'
-            cards.forEach(card => {
-                card.style.display = "none"
-            })
-            //console.log('then block', cards[0])
-            cards[0].style.display = "block"
+        cards.forEach(card => {
+            card.style.display = "none"
+        })
+        //console.log('then block', cards[0])
+        cards[0].style.display = "block"
+        startSlideShow()
     }
     //gallery(0)
 }
@@ -262,3 +265,24 @@ function filterAlcohol(){
 document.querySelector('#filter').addEventListener('input', filterAlcohol)
 // document.querySelector('#filter').addEventListener('mousemove', logCards)
 // function logCards(){ console.log(cards)}
+
+const init = (currentDrink) => {
+    slides.forEach((slide, index) => {
+      slide.style.display = "none"
+    })
+    slides[currentDrink].style.display = "block"
+  }
+//start gallery slideshow
+var intervalID;
+function startSlideShow(){
+    console.log('start slideshow')
+  if(intervalID !== undefined){
+    clearInterval(intervalID)
+  }
+  intervalID = setInterval(next, 3000)
+}
+//stop gallery slideshow
+function stopSlideShow(){
+    console.log('end slideshow')
+  clearInterval(intervalID);
+}
