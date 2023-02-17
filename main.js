@@ -140,12 +140,15 @@ function getDrink(e) {
             //console.log('then block', cards[0])
             cards[0].style.display = "block"
             document.querySelector('#filter').toggleAttribute('disabled', false)
+            document.querySelector('#searchCount').innerText = `Results: ${cards.length}`
+            startSlideShow()
         }else{
             //console.log('cards NOT present')
             noresults.style.display = 'block'
             document.querySelector('.starting').style.display = 'block'
             noresults.innerText = 'No results found, please try a different search.'
             document.querySelector('#filter').toggleAttribute('disabled', true)
+            document.querySelector('#searchCount').innerText = ``
         }
         // .then(array=>{
         //     array.forEach(drink=>{
@@ -200,6 +203,7 @@ const next = (e) => {
     // cards = document.querySelectorAll(".card")
     if(e){
       e.preventDefault()}
+    if(!cards)return
     currentDrink >= cards.length - 1 ? currentDrink = 0 : currentDrink++
     gallery(currentDrink)
 }
@@ -208,13 +212,15 @@ const next = (e) => {
 const prev = (e) => {
     // cards = document.querySelectorAll(".card")
     e.preventDefault()
+    if(!cards)return
     currentDrink <= 0 ? currentDrink = cards.length - 1 : currentDrink--
     gallery(currentDrink)
 }
 
 document.querySelector(".next").addEventListener('click', next)
 document.querySelector(".prev").addEventListener('click', prev)
-
+document.querySelector(".next").addEventListener('click', stopSlideShow)
+document.querySelector(".prev").addEventListener('click', stopSlideShow)
 
 //from current search array, filter drinks that match alcohol filter and display
 //populate to cards, but keep current full search cards in memory
@@ -245,16 +251,19 @@ function filterAlcohol(){
     if(cards.length === 0){
         noresults.style.display = 'block'
         document.querySelector('.starting').style.display = 'block'
+        document.querySelector('#searchCount').innerText = ``
         noresults.innerText = 'No results found, please try a different search or filter.'
         //document.querySelector('#filter').toggleAttribute('disabled', true)
     }else{
         document.querySelector('.starting').style.display = 'none'
         noresults.style.display = 'none'
-            cards.forEach(card => {
-                card.style.display = "none"
-            })
-            //console.log('then block', cards[0])
-            cards[0].style.display = "block"
+        cards.forEach(card => {
+            card.style.display = "none"
+        })
+        //console.log('then block', cards[0])
+        cards[0].style.display = "block"
+        document.querySelector('#searchCount').innerText = `Results: ${cards.length}`
+        startSlideShow()
     }
     //gallery(0)
 }
@@ -262,3 +271,22 @@ function filterAlcohol(){
 document.querySelector('#filter').addEventListener('input', filterAlcohol)
 // document.querySelector('#filter').addEventListener('mousemove', logCards)
 // function logCards(){ console.log(cards)}
+
+const init = (currentDrink) => {
+    slides.forEach((slide, index) => {
+      slide.style.display = "none"
+    })
+    slides[currentDrink].style.display = "block"
+  }
+//start gallery slideshow
+var intervalID;
+function startSlideShow(){
+  if(intervalID !== undefined){
+    clearInterval(intervalID)
+  }
+  intervalID = setInterval(next, 3000)
+}
+//stop gallery slideshow
+function stopSlideShow(){
+  clearInterval(intervalID);
+}

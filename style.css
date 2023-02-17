@@ -1,11 +1,11 @@
-html{
+/* html{
     min-height: 100%;
-}
+} */
 
 body {
     text-align: center;
-    height: 100%;
-    min-height: fit-content;
+    /* height: 100%; */
+    /* min-height: fit-content; */
     /* overflow: auto; */
     font-size: 1.5rem;
     color: white;
@@ -46,21 +46,18 @@ form {
     margin: 0 auto;
     text-align: center;
 }
+#searchCount {
+    display: block;
+}
 #results{
-    /* display: flex;
-    align-items: flex-start;
-    max-width: 100%; */
-    /* overflow: hidden; */
-
-    /* height: 10rem; */
     display: flex;
     align-items: flex-start;
-    width: 100%;
+    align-content: center;
+    flex-basis: 4;
+    /* width: 100%; */
     margin: 0 auto;
-    position: relative;
     transition: 0.5s linear;
 }
-
 .card {
     /* background-color: rgba(0, 0, 0, 0.451); */
     display: none;
@@ -75,26 +72,30 @@ form {
     display: flex;
     flex-flow: row nowrap;
     /* width: 100%; */
-    min-height: 80vh;
+    /* min-height: 80vh; */
     /* position: relative; */
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    max-width: 700px;
+    margin: 0 auto;
+    /* position: relative; */
 }
 .prev, .next {
-    /* align-self: center; */
+    position: relative;
+    top: 12rem;
     cursor: pointer;
-    /* position: absolute; */
-    width: 10%;
-    /* margin: auto 0; */
-    padding: 2rem;
+    /* width: 8%; */
+    padding: 1rem;
     /* color: rgb(0, 0, 0); */
     font-weight: bold;
-    font-size: 5rem;
+    font-size: 3.5rem;
     transition: all 0.6s ease;
-    border-radius: 3px;
     user-select: none;
-    z-index: 4;
-    /* top: 35%; */
+    flex-basis: 1;
+    /* align-self: stretch; */
+}
+.prev:hover, .next:hover{
+    color: rgb(52, 194, 199);
 }
 .prev{
     padding-left: 1rem;
@@ -131,9 +132,20 @@ footer span{
     background-color: rgb(36, 36, 36);
 }
 
+@media screen and (min-width: 400px) {
+    .prev, .next {
+        top: 15rem;}
+    #searchCount {
+        display: inline;
+        padding: 1rem;
+    }
+}
+
 @media screen and (min-width: 500px) {
     img{
         width: 70%;
         min-width: 310px;
     }
+    .prev, .next {
+        top: 18rem;}
 }

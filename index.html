@@ -7,7 +7,7 @@
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Cocktails</title>
+    <title>Mixed Drinks, Cocktails, fun times!</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="normalize.css">
@@ -15,7 +15,8 @@
 <body>
     <header>
         <h1>Mixed drinks, cocktails, fun times!</h1>
-        <p>Search by name or ingredient! Optional filter by alcohol content after search.</p>
+        <span>Search by name or ingredient!</span>
+        <p>Optional filter by alcohol content after search. Auto advance gallery can be stopped by clicking either previous or next arrow buttons.</p>
     </header>
     <form id="form" action="">
         <fieldset id="searchPart">
@@ -35,6 +36,7 @@
                 <option value="non-alcoholic">Non-Alcoholic</option>
                 <option value="optional-alcohol">Optional Alcohol</option>
             </select>
+            <span id="searchCount"></span>
         </fieldset>
     </form>
     <h3 class="noResults"></h3>
